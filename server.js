@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
 app.use(bodyParser.json());
@@ -30,6 +31,10 @@ app.get('/', (req,res)=>{
 })
 
 app.post('/signin', (req,res)=>{
+    bcrypt.compare("cookiesa", "$2a$10$4EWfkp1VD1jVqnlv/oDL/O/WkDOzdAfwShNGEze9WxfBea.zZPOqS", function(err, res) {
+        // res == true
+        console.log(res);
+    });
     if(req.body.email === database.users[0].email && req.body.password === database.users[0].password){
         res.json('success');
     }else{
@@ -40,6 +45,10 @@ app.post('/signin', (req,res)=>{
 
 app.post('/register', (req,res)=>{
     const { email, name, password } = req.body;
+    bcrypt.hash(password, null, null, function(err, hash) {
+        console.log(hash);
+        // Store hash in your password DB.
+    });
     database.users.push({
             id:'1',
             name: name,
